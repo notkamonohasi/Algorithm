@@ -1,0 +1,48 @@
+struct ExMat{
+    Mat mat;
+    ExMat(Mat mat_) : mat(mat_){}
+    ExMat(ll h, ll w, ll k){ mat = init_mat(h, w, k); }
+    
+    ll at(ll i, ll j){ return mat[i][j]; }
+    void set(ll i, ll j, ll x){ mat[i][j] = x; }
+    
+    // ここを書き換える   半環ならなんでもよい
+    ll plus(ll a, ll b) const{ return a & b; }
+    ll mul(ll a, ll b) const{ return a ^ b; }
+    
+    ExMat operator * (const ExMat& anotherExMat) const{
+        Mat another = anotherExMat.mat;
+        ll size1 = mat.size();
+        ll size2 = another[0].size();
+        ll size3 = another.size();
+        Mat ret = init_mat(size1, size2);
+        rep(i, size1){
+            rep(j, size3){
+                rep(k, size2){
+                    ret[i][j] = plus(ret[i][j], mul(mat[i][k], another[k][j]));
+                }
+            }
+        }
+        return ret;
+    }
+    ExMat operator + (const ExMat& anotherExMat) const{
+        Mat another = anotherExMat.mat;
+        ll h = mat.size();
+        ll w = mat[0].size();
+        Mat ret = init_mat(h, w);
+        rep(i, h){
+            rep(j, w){
+                ret[i][j] = plus(mat[i][j], another[i][j]);
+            }
+        }
+        return ret;
+    }
+    ExMat operator ^ (const ll n) const{
+        ExMat ret(init_mat((ll)mat.size(), (ll)mat[0].size(), 1));
+        while(n > 0){
+            if(n & 1) ret = matMul(ret, a, mod);
+            a = matMul(a, a, mod);
+            n >>= 1;
+        }
+    }
+};
