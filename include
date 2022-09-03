@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+//#define MOD 1000000007
+#define MOD 998244353
+#define ll long long
+#define ld long double
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define frep(i, k, n) for (ll i = (ll)k; i < (ll)(n); i++)
+#define brep(i, n) for (ll i = (ll)(n - 1); i >= 0; i--)
+#define irep(it, mp) for (auto it = mp.begin(); it != mp.end(); it++)
+#define len(x) (ll)x.size()
+#define print(x) cout << x << endl
+#define nprint(x) cout << x << " "
+#define dprint(a, b) cout << a << " " << b << endl
+#define tprint(a, b, c) cout << a << " " << b << " " << c << endl
+#define fprint(a, b, c, d) cout << a << " " << b << " " << c << " " << d << endl
+#define pprint(x) cout << fixed << setprecision(10) << x << endl
+#define vprint(v) for(auto x : v) cout << x << " ";   cout << endl
+#define bs(st, key) st.find(key) != st.end() ? true : false
+#define lb(v, k) lower_bound(v.begin(), v.end(), k)
+#define ub(v, k) upper_bound(v.begin(), v.end(), k)
+#define all(v) v.begin(), v.end()
+#define bit(x,i)(((x)>>(i))&1)
+using namespace std;
+
+//const ll vec[][2] = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+//const ll vec[][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+//const ld PI = 3.141592653589793238462643;
+
+ll POW(ll a, ll n){if(n == 0) return 1; if(n == 1) return a; if(n % 2 == 1) return (a * POW(a, n - 1)); ll t = POW(a, n / 2); return (t * t);}
+ll CEIL(ll a, ll b){ll ret = (a + b - 1) / b; return ret;}
+ll max(ll a, ll b){if(a > b) return a; else return b;}
+ll min(ll a, ll b){if(a > b) return b; else return a;}
+ll max(ll a, ll b, ll c){ll d = max(a, b); return max(c, d);}
+ll min(ll a, ll b, ll c){ll d = min(a, b); return min(c, d);}
+void yes(bool b){if(b) cout << "Yes" << endl; else cout << "No" << endl;}
+using P = pair<ll, ll>;
+using T = tuple<ll, ll, ll>; // ll x, y, z; tie(x, y, z) = T
+template<typename T> using PQ = priority_queue<T>;
+template<typename T> using IQ = priority_queue<T, vector<T>, greater<T>>;
+
+using Mat = vector<vector<ll> >;
+Mat init_mat(ll a, ll b){Mat ret; vector<ll> empty; rep(i, b) empty.push_back(0); rep(i, a) ret.push_back(empty); return ret;}
+Mat init_mat(ll a, ll b, ll c){Mat ret; vector<ll> empty; rep(i, b) empty.push_back(c); rep(i, a) ret.push_back(empty); return ret;}
+// using Graph = vector<vector<ll> >;
+// Graph init_graph(ll V){Graph ret; vector<ll> empty; rep(i, V) ret.push_back(empty); return ret;}
+
+struct Edge{ll to, cost;};
+using Graph = vector<vector<Edge> >;
+Graph init_graph(ll V){Graph ret; vector<Edge> empty; rep(i, V) ret.push_back(empty); return ret;}
+
