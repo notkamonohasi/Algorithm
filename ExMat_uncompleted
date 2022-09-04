@@ -1,3 +1,5 @@
+https://atcoder.jp/contests/abc009/tasks/abc009_4
+
 struct ExMat{
     Mat mat;
     ExMat(Mat mat_) : mat(mat_){}
@@ -7,8 +9,20 @@ struct ExMat{
     void set(ll i, ll j, ll x){ mat[i][j] = x; }
     
     // ここを書き換える   半環ならなんでもよい
-    ll plus(ll a, ll b) const{ return a & b; }
-    ll mul(ll a, ll b) const{ return a ^ b; }
+    ll plus(ll a, ll b) const{ return a ^ b; }
+    ll mul(ll a, ll b) const{ return a & b; }
+    
+    void debug(){
+        ll h = mat.size();
+        ll w = mat[0].size();
+        rep(i, h){
+            rep(j, w){
+                cout << mat[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+    void output(ll i, ll j){ print(mat[i][j]); }
     
     ExMat operator * (const ExMat& anotherExMat) const{
         Mat another = anotherExMat.mat;
@@ -17,13 +31,13 @@ struct ExMat{
         ll size3 = another.size();
         Mat ret = init_mat(size1, size2);
         rep(i, size1){
-            rep(j, size3){
-                rep(k, size2){
+            rep(j, size2){
+                rep(k, size3){
                     ret[i][j] = plus(ret[i][j], mul(mat[i][k], another[k][j]));
                 }
             }
         }
-        return ret;
+        return ExMat(ret);
     }
     ExMat operator + (const ExMat& anotherExMat) const{
         Mat another = anotherExMat.mat;
@@ -35,14 +49,37 @@ struct ExMat{
                 ret[i][j] = plus(mat[i][j], another[i][j]);
             }
         }
-        return ret;
+        return ExMat(ret);
     }
-    ExMat operator ^ (const ll n) const{
-        ExMat ret(init_mat((ll)mat.size(), (ll)mat[0].size(), 1));
+    ExMat operator ^ (ll n) const{
+        if(n == 0) return ExMat(init_mat((ll)mat.size(), (ll)mat[0].size(), 1));
+        n--;
+        ExMat ret(mat);
+        ExMat a(mat);
         while(n > 0){
-            if(n & 1) ret = matMul(ret, a, mod);
-            a = matMul(a, a, mod);
+            if(n & 1) ret = ret * a;
+            ExMat(ret).debug();
+            a = a * a;
             n >>= 1;
         }
+        return ret;
     }
 };
+
+int main(){
+    ll k, m;
+    cin >> k >> m;
+    ll a[k], c[k];
+    rep(i, k) cin >> a[i];
+    rep(i, k) cin >> c[i];
+    Mat mat = init_mat(k, k, 0);
+    rep(i, k) mat[0][i] = c[i];
+    rep(i, k - 1) mat[i + 1][i] = 1;
+    ExMat exMat(mat);
+    exMat = exMat ^ (m - k - 1);
+    Mat anotherMat = init_mat(k, 1);
+    rep(i, k) anotherMat[k - 1 - i][0] = a[i];
+    ExMat anotherExMat(anotherMat);
+    exMat = exMat * anotherExMat;
+    exMat.output(0, 0);
+}
