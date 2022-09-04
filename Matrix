@@ -8,8 +8,8 @@ Mat matMul(Mat& a, Mat& b, ll mod = -1){
     ll size3 = b.size();
     Mat ret = init_mat(size1, size2);
     rep(i, size1){
-        rep(j, size3){
-            rep(k, size2){
+        rep(j, size2){
+            rep(k, size3){
                 ret[i][j] += a[i][k] * b[k][j];
                 if(mod > 0) ret[i][j] %= MOD;
             }
