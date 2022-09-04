@@ -1,4 +1,5 @@
 /* 最大流（FordFulkerson）
+ * パクリ : https://algo-logic.info/bipartite-matching/ 
  * verify : https://onlinejudge.u-aizu.ac.jp/status/users/kamonohasi/submissions/1/GRL_6_A/judge/6940063/C++17
  */
 /* FordFulkerson: Ford-Fulkersonのアルゴリズムで最大流を求める構造体
