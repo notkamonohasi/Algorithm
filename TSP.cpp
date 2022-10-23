@@ -6,7 +6,7 @@ template<typename T>
 struct TSP{
     using TMat = vector<vector<T>>;
     TMat cost, dp;
-    ll n, m;
+    ll n;
     T INF;
     TSP(TMat cost_) : cost(cost_), n(cost_.size()){
         if(typeid(T) == typeid(double)) INF = DBL_MAX;
