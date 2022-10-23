@@ -51,7 +51,7 @@ struct TSP{
 
 /* 配る型のTSP
  * 上のメモ再帰より10倍ほど遅いが、中途半端な状態のコストも計算できる
- * verify : https://atcoder.jp/contests/abc180/submissions/35920936 
+ * verify : https://atcoder.jp/contests/abc180/submissions/35921291
  */
 template<typename T>
 struct TSP{
@@ -89,7 +89,7 @@ struct TSP{
             pq.pop();
             ll visit = state.visit;
             ll pos = state.pos;
-            ll posCost = state.cost;
+            T posCost = state.cost;
             if(dp[visit][pos] < posCost) continue;
             rep(i, n){
                 if(!(visit >> i & 1)){ 
