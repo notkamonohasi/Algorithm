@@ -47,3 +47,63 @@ struct TSP{
         return ret;
     }
 };
+
+
+/* 配る型のTSP
+ * 上のメモ再帰より10倍ほど遅いが、中途半端な状態のコストも計算できる
+ * verify : https://atcoder.jp/contests/abc180/submissions/35920936 
+ */
+template<typename T>
+struct TSP{
+    using TMat = vector<vector<T>>;
+    TMat cost, dp;
+    ll n;
+    T INF;
+    
+    struct State{
+        ll visit, pos;
+        T cost;
+        State(){}
+        State(ll visit_, ll pos_, T cost_) : visit(visit_), pos(pos_), cost(cost_){}
+        
+        bool operator > (const State& another) const{return cost > another.cost;}
+        bool operator < (const State& another) const{return cost < another.cost;}
+    };
+    
+    TSP(TMat cost_) : cost(cost_), n(cost_.size()){
+        if(typeid(T) == typeid(double)) INF = DBL_MAX;
+        else if(typeid(T) == typeid(ll)) INF = LLONG_MAX;
+        else{
+            print("type error");
+            exit(EXIT_FAILURE);
+        }
+    }
+    
+    void build(ll start){
+        dp = TMat(1 << n, vector<T>(n, INF));
+        IQ<State> pq;
+        State firstState(0, start, double(0.0));
+        pq.push(firstState);
+        while(!pq.empty()){
+            State state = pq.top();
+            pq.pop();
+            ll visit = state.visit;
+            ll pos = state.pos;
+            ll posCost = state.cost;
+            if(dp[visit][pos] < posCost) continue;
+            rep(i, n){
+                if(!(visit >> i & 1)){ 
+                    T nextCost = posCost + cost[pos][i];
+                    ll nextVisit = visit | 1 << i;
+                    if(dp[nextVisit][i] > nextCost){
+                        dp[nextVisit][i] = nextCost;
+                        State nextState(nextVisit, i, nextCost);
+                        pq.push(nextState);
+                    }
+                }
+            }
+        }
+    }
+    
+    T get(ll visit, ll pos){return dp[visit][pos];}
+};
