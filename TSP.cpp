@@ -1,5 +1,6 @@
 /* u->vが存在しない場合はcost[u][v]をLLONG_MAXで初期化しておく必要あり 
  * costの型はlong longかdoubleである必要がある
+ * INFの設定周りでコンパイルエラーがめっちゃでる
  * verify : https://atcoder.jp/contests/abc180/submissions/35913642
  */
 template<typename T>
