@@ -1,3 +1,7 @@
+/* パクリ先 : https://kanpurin.hatenablog.com/entry/2023/01/12/144745
+ * verify : https://atcoder.jp/contests/abc284/submissions/38751529
+ */
+
 struct RollingHash {
 private:
     using ull = unsigned long long;
