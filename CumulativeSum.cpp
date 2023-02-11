@@ -1,4 +1,4 @@
-/* 未verify
+/* verify : https://atcoder.jp/contests/abc129/submissions/38778444
  */
 
 template<typename T>
@@ -20,4 +20,7 @@ struct CumulativeSum{
     
     // [0, b)の和を出力
     T query(ll b){ return sum[b]; }
+    
+    // 全ての和
+    T getAllSum(){ return sum[n]; }
 }; 
