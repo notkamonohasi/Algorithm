@@ -1,3 +1,5 @@
+/* key word : エラトステネスの篩
+ */
 vector<bool> Eratosthenes(ll N) {
     vector<bool> isprime(N + 1, true);
     isprime[0] = isprime[1] = false;
