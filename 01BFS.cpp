@@ -1,33 +1,56 @@
 /* 計算量 : O(E + V)
- * verify : https://atcoder.jp/contests/abc213/submissions/34891632 
+ * verify : https://atcoder.jp/contests/abc222/submissions/44250371, https://atcoder.jp/contests/abc213/submissions/44250167
  */
 
-struct Edge{ll to, cost;};
-using Graph = vector<vector<Edge> >;
-Graph init_graph(ll V){Graph ret; vector<Edge> empty; rep(i, V) ret.push_back(empty); return ret;}
 
-vector<ll> bfs(Graph& g, ll start){
-    ll size = g.size();
-    vector<ll> opt(size, INT_MAX);
+struct BFS01{
+    vector<ll> prev, dist;
+    ll V; 
+    ll start; 
 
-    deque<Edge> dq;
-    Edge first{start, 0};
-    opt[start] = 0;
-    dq.push_back(first);
-    
-    while(!dq.empty()){
-        Edge e = dq.front();
-        dq.pop_front();
+    BFS01(){}
+
+    // EdgeGraphをclass変数に持つと初期化コストが大きくなるので、都度引数にいれることにする
+    vector<ll> build(const EdgeGraph& edge_graph, ll start_){
+        start = start_; 
+        V = edge_graph.size(); 
+        prev.resize(V, -1); 
+        dist.resize(V, INT_MAX); 
         
-        for(Edge e2 : g[e.to]){
-            ll nextCost = e.cost + e2.cost;
-            if(nextCost < opt[e2.to]){
-                opt[e2.to] = nextCost;
-                Edge next{e2.to, nextCost};
-                if(e2.cost == 0) dq.push_front(next);
-                else dq.push_back(next);
+        deque<ll> dq;
+        dq.push_back(start); 
+        dist[start] = 0; 
+
+        while(!dq.empty()){
+            ll pos = dq.front(); 
+            dq.pop_front(); 
+            ll cost = dist[pos]; 
+            for(const Edge& e : edge_graph[pos]){
+                ll next_cost = cost + e.cost; 
+                if(dist[e.to] > next_cost){
+                    dist[e.to] = next_cost; 
+                    prev[e.to] = pos;
+
+                    // コストが0なら前に入れ、1なら後ろに入れる
+                    if(e.cost) dq.push_back(e.to); 
+                    else dq.push_front(e.to); 
+                }
             }
         }
+
+        return dist; 
     }
-    return opt;
-}
+
+    // 経路を復元する
+    vector<ll> get_path(ll goal){
+        ll pos = goal;
+        vector<ll> ret;  
+        while(pos != -1){
+            ret.push_back(pos); 
+            pos = prev[pos]; 
+        }
+        reverse(all(ret));
+        assert(ret[0] == start); 
+        return ret; 
+    }
+}; 
