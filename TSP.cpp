@@ -1,68 +1,48 @@
 /* 配る型のTSP
- * もらう型の方がやや早い（1.1倍くらい）が、こちらは中途半端な状態を取得できる
- * INFの設定でエラーが出る
- * verify : https://atcoder.jp/contests/abc180/submissions/35922312   https://atcoder.jp/contests/abc274/submissions/35922274
+ * verify : https://atcoder.jp/contests/abc180/submissions/50469749
  */
 template<typename T>
-struct TSP{
+class TSP{
+public:
     using TMat = vector<vector<T>>;
-    TMat cost, dp;
-    ll n, m;
-    T INF;
-    vector<ll> memo2pow;   // 2^iをメモ
-    
-    TSP(TMat cost_) : cost(cost_), n(cost_.size()), memo2pow(n + 1){
-        if(typeid(T) == typeid(double)) INF = DBL_MAX;
-        else if(typeid(T) == typeid(ll)) INF = LLONG_MAX;
-        else{
-            print("type error");
-            exit(EXIT_FAILURE);
-        }
-        rep(i, n + 1) memo2pow[i] = POW(2, i);
+    TMat cost;  // i->jのコスト
+    T INF;  // 到達不可能などをコントロール
+
+    TMat dp;
+    ll n;  // 地点数
+    vector<ll> pow2vec;  // 2^iをメモ
+    ll start;
+
+    TSP(TMat& cost_, T INF_ = LLONG_MAX) : cost(cost_), INF(INF_){
+        n = cost.size();
+        pow2vec.resize(n);
+        rep(i, n) pow2vec[i] = (1 << i);
     }
-    
-    void build(ll start){
-        dp = TMat(1 << n, vector<T>(n, INF));
-        dp[0][start] = T(0.0);
-        rep(depth, n){
-            vector<ll> vec, _pos;
-            makeTarget(vec, _pos, depth);
-            for(ll& visit : vec){
-                rep(i, n){   // 今いる場所
-                    if(dp[visit][i] == INF) continue;
-                    rep(j, n){   // 次いく場所
-                        if(!(visit >> j & 1)){
-                            T nextCost = dp[visit][i] + cost[i][j];
-                            ll nextVisit = visit | memo2pow[j];
-                            chmin(dp[nextVisit][j], nextCost);
-                        }
+
+    /* `start_`を出発地点とした時のdp[i][j]を構築 */
+    void build(ll start_){
+        start = start_;
+        const ll SIZE = (1 << n);
+        dp = TMat(SIZE, vector<T>(n, INF));
+        dp[0][start] = T(0);
+
+        rep(i, SIZE){
+            rep(j, n){
+                if(dp[i][j] == INF) continue;  // 到達不可能
+                rep(k, n){
+                    if(cost[j][k] == INF) continue;  // j->kに辺が貼られていない
+                    else if(i & pow2vec[k] != 0) continue;  // 既にkを訪問している
+                    else{
+                        ll next = i | pow2vec[k];
+                        dp[next][k] = min(dp[next][k], dp[i][j] + cost[j][k]);
                     }
                 }
             }
         }
     }
-    
-    void makeTarget(vector<ll>& vec, vector<ll>& pos, ll& size){
-        if(pos.size() == size) vec.push_back(encode(pos));
-        else{
-            ll last; 
-            if(pos.size() != 0) last = pos[pos.size() - 1];
-            else last = -1;
-            frep(i, last + 1, n){
-                pos.push_back(i);
-                makeTarget(vec, pos, size);
-                pos.pop_back();
-            }
-        }
-    }
-    
-    ll encode(vector<ll>& v){
-        ll ret = 0;
-        for(ll& x : v) ret += memo2pow[x];
-        return ret;
-    }
-    
-    T get(ll visit, ll pos){return dp[visit][pos];}
+
+    /* 一周の最短距離を取得。`build()`が実行されている必要あり */
+    T get(){ return dp[(1 << n) - 1][start]; }
 };
 
 
