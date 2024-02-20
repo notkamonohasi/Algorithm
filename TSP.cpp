@@ -1,5 +1,5 @@
 /* 配る型のTSP
- * verify : https://atcoder.jp/contests/abc180/submissions/50469749
+ * verify : https://atcoder.jp/contests/abc180/submissions/50470361
  */
 template<typename T>
 class TSP{
@@ -31,7 +31,7 @@ public:
                 if(dp[i][j] == INF) continue;  // 到達不可能
                 rep(k, n){
                     if(cost[j][k] == INF) continue;  // j->kに辺が貼られていない
-                    else if(i & pow2vec[k] != 0) continue;  // 既にkを訪問している
+                    // else if((i & pow2vec[k]) != 0) continue;  // 既にkを訪問している (入れると遅くなる)
                     else{
                         ll next = i | pow2vec[k];
                         dp[next][k] = min(dp[next][k], dp[i][j] + cost[j][k]);
@@ -44,7 +44,6 @@ public:
     /* 一周の最短距離を取得。`build()`が実行されている必要あり */
     T get(){ return dp[(1 << n) - 1][start]; }
 };
-
 
 
 /* u->vが存在しない場合はcost[u][v]をLLONG_MAXで初期化しておく必要あり 
