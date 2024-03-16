@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-//#define MOD 1000000007
+// #define MOD 1000000007
 #define MOD 998244353
 #define ll long long
 #define ld long double
@@ -8,43 +8,93 @@
 #define brep(i, n) for (ll i = (ll)(n - 1); i >= 0; i--)
 #define irep(it, mp) for (auto it = mp.begin(); it != mp.end(); it++)
 #define len(x) (ll)x.size()
-#define print(x) cout << x << endl
-#define nprint(x) cout << x << " "
-#define dprint(a, b) cout << a << " " << b << endl
-#define tprint(a, b, c) cout << a << " " << b << " " << c << endl
-#define fprint(a, b, c, d) cout << a << " " << b << " " << c << " " << d << endl
-#define pprint(x) cout << fixed << setprecision(10) << x << endl
-#define vprint(v) for(auto x : v) cout << x << " ";   cout << endl
-#define bs(st, key) st.find(key) != st.end() ? true : false
-#define lb(v, k) lower_bound(v.begin(), v.end(), k)
+#define pprint(x) cout << fixed << setprecision(12) << x << endl
+#define bs(st, key) (st.find(key) != st.end() ? true : false)
+#define lb(v, k) lower_bound(v.begin(), v.end(), k) 
 #define ub(v, k) upper_bound(v.begin(), v.end(), k)
 #define all(v) v.begin(), v.end()
 #define bit(x,i)(((x)>>(i))&1)
 using namespace std;
 
-//const ll vec[][2] = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
-//const ll vec[][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-//const ld PI = 3.141592653589793238462643;
+// const vector<vector<ll>> neighbor_vec = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+// const vector<vector<ll>> neighbor_vec = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+// map<char, vector<ll>> neighbor_mp = {{'D', {1, 0}}, {'R', {0, 1}}, {'U', {-1, 0}}, {'L', {0, -1}}};  // constつかない
+// const ld PI = 3.141592653589793238462643;
 
-ll POW(ll a, ll n){if(n == 0) return 1; if(n == 1) return a; if(n % 2 == 1) return (a * POW(a, n - 1)); ll t = POW(a, n / 2); return (t * t);}
+ll POW(ll a, ll n){if(n == 0) return 1; if(n == 1) return a; if(n % 2 == 1) return a * POW(a, n - 1); ll t = POW(a, n / 2); return t * t;}
+ll MODPOW(ll a, ll n){if(n == 0) return 1; if(n == 1) return a % MOD; if(n % 2 == 1) return (a * MODPOW(a, n - 1)) % MOD; ll t = MODPOW(a, n / 2); return (t * t) % MOD;}
+ll MODINV(ll a){return MODPOW(a, MOD - 2);}
 ll CEIL(ll a, ll b){ll ret = (a + b - 1) / b; return ret;}
+ll SUM(vector<ll>& v){ll ret = 0; for(ll x : v) ret += x;return ret; }
+ll max(vector<ll>& v){assert(v.size() > 0); ll ret = v[0]; for(ll x : v) ret = max(ret, x); return ret; }
+ll min(vector<ll>& v){assert(v.size() > 0); ll ret = v[0]; for(ll x : v) ret = min(ret, x); return ret; }
 ll max(ll a, ll b){if(a > b) return a; else return b;}
 ll min(ll a, ll b){if(a > b) return b; else return a;}
+double min(double a, double b){if(a > b) return b; else return a;}
 ll max(ll a, ll b, ll c){ll d = max(a, b); return max(c, d);}
 ll min(ll a, ll b, ll c){ll d = min(a, b); return min(c, d);}
+ll argmax(vector<ll>& v){assert(v.size() > 0); ll ret = 0; ll best = v[0]; frep(i, 1, v.size()){ if(best < v[i]){ best = v[i]; ret = i; }} return ret; }
+ll argmin(vector<ll>& v){assert(v.size() > 0); ll ret = 0; ll best = v[0]; frep(i, 1, v.size()){ if(best > v[i]){ best = v[i]; ret = i; }} return ret; }
+void chmax(ll& a, ll b){if(b > a) a = b;}
+void chmin(ll& a, ll b){if(a > b) a = b;}
 void yes(bool b){if(b) cout << "Yes" << endl; else cout << "No" << endl;}
+void print(){cout << endl;}
+template <class Head, class... Tail> void print(Head&& head, Tail&&... tail){cout << head << " "; print(std::forward<Tail>(tail)...);}
+template<typename T> void vprint(vector<T>& v){for(T x : v) cout << x << " "; cout << endl;}
 using P = pair<ll, ll>;
+bool sameP(P& p1, P& p2){if(p1.first == p2.first && p1.second == p2.second) return true; else return false;}
+void print_pair(P& p){cout << p.first << " " << p.second << endl;}
 using T = tuple<ll, ll, ll>; // ll x, y, z; tie(x, y, z) = T
 template<typename T> using PQ = priority_queue<T>;
 template<typename T> using IQ = priority_queue<T, vector<T>, greater<T>>;
+using Mat = vector<vector<ll>>;
+Mat init_mat(ll a, ll b){Mat ret(a, vector<ll>(b, 0)); return ret;}
+Mat init_mat(ll a, ll b, ll c){Mat ret(a, vector<ll>(b, c)); return ret;}
+template<typename T>
+void print_mat(vector<vector<T>>& mat){rep(i, mat.size()){rep(j, mat[i].size()){cout << mat[i][j] << " ";}cout << endl;}}
+using PMat = vector<vector<P>>;
+PMat init_pmat(ll a, ll b){PMat ret(a, vector<P>(b, P(0, 0))); return ret;}
+PMat init_pmat(ll a, ll b, P c){PMat ret(a, vector<P>(b, c)); return ret;}
+using BMat = vector<vector<bool>>;
+BMat init_bmat(ll a, ll b){BMat ret(a, vector<bool>(b, false)); return ret;}
+BMat init_bmat(ll a, ll b, bool c){BMat ret(a, vector<bool>(b, c)); return ret;}
+using DMat = vector<vector<double>>;
+DMat init_dmat(ll a, ll b){DMat ret(a, vector<double>(b, 0.0)); return ret;}
+DMat init_dmat(ll a, ll b, double c){DMat ret(a, vector<double>(b, c)); return ret;}
+using Tensor = vector<vector<vector<ll>>>;
+Tensor init_tensor(ll a, ll b, ll c){Tensor ret(a, Mat(b, vector<ll>(c, 0))); return ret;}
+Tensor init_tensor(ll a, ll b, ll c, ll d){Tensor ret(a, Mat(b, vector<ll>(c, d))); return ret;}
 
-using Mat = vector<vector<ll> >;
-Mat init_mat(ll a, ll b){Mat ret; vector<ll> empty; rep(i, b) empty.push_back(0); rep(i, a) ret.push_back(empty); return ret;}
-Mat init_mat(ll a, ll b, ll c){Mat ret; vector<ll> empty; rep(i, b) empty.push_back(c); rep(i, a) ret.push_back(empty); return ret;}
-// using Graph = vector<vector<ll> >;
-// Graph init_graph(ll V){Graph ret; vector<ll> empty; rep(i, V) ret.push_back(empty); return ret;}
+using Graph = vector<vector<ll> >;
+Graph init_graph(ll V){Graph ret; vector<ll> empty; rep(i, V) ret.push_back(empty); return ret;}
 
-struct Edge{ll to, cost;};
-using Graph = vector<vector<Edge> >;
-Graph init_graph(ll V){Graph ret; vector<Edge> empty; rep(i, V) ret.push_back(empty); return ret;}
+struct Edge{
+    ll number, from, to; 
+    ll cost;
+    Edge(){}
+    Edge(ll a) : to(a){}
+    Edge(ll a, ll b) : to(a), cost(b){}
+    Edge(ll a, ll b, ll c) : from(a), to(b), cost(c){}
+    Edge(ll a, ll b, ll c, ll d) : number(a), from(b), to(c), cost(d){}
+    bool operator > (const Edge& another) const{return cost > another.cost;}
+    bool operator < (const Edge& another) const{return cost < another.cost;}
+}; 
+using EdgeGraph = vector<vector<Edge> >;
+EdgeGraph init_edgeGraph(ll V){EdgeGraph ret; vector<Edge> empty; rep(i, V) ret.push_back(empty); return ret;}
 
+struct Place{
+    ll y, x;
+    Place(){}
+    Place(ll y_, ll x_) : y(y_), x(x_){}
+    bool is_inside(ll h, ll w){ return (0 <= y && y < h && 0 <= x && x < w); }
+    bool is_inside(ll n){ return is_inside(n, n); }
+    Place operator + (const Place& another) const{ return Place(y + another.y, x + another.x); }
+    Place operator + (const P& p) const{ return Place(y + p.first, x + p.second); }
+    Place operator + (const vector<ll>& v) const{ return Place(y + v[0], x + v[1]); }
+    bool operator == (const Place& another) const{ return y == another.y && x == another.x; }
+}; 
+
+random_device rd;
+mt19937 eng(0);
+uniform_int_distribution<> randInt(0, INT_MAX);
+uniform_real_distribution<> uniform(0.0, 1.0);
