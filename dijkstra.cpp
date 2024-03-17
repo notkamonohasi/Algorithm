@@ -1,37 +1,51 @@
-struct Edge{ll to, cost;};
-using Graph = vector<vector<Edge> >;
-Graph init_graph(ll V){Graph ret; vector<Edge> empty; rep(i, V) ret.push_back(empty); return ret;}
+// keywords: 最短距離
 
-void dijkstra(const Graph& G, ll s, vector<ll>& dis, vector<ll>& prev) {
-    ll N = G.size();
-    dis.resize(N, INT_MAX);  // LLONG_MAXにすると壊れる。場合によってはINT_MAXだと危険かも
-    prev.resize(N, -1); // 初期化
-    priority_queue<P, vector<P>, greater<P>> pq; 
-    dis[s] = 0;
-    pq.emplace(dis[s], s);
-    while(!pq.empty()){
-        P p = pq.top();
-        pq.pop();
-        ll v = p.second;
-        if(dis[v] < p.first){
-            continue;
-        }
-        for(auto &e : G[v]){
-            if(dis[e.to] > dis[v] + e.cost){
-                dis[e.to] = dis[v] + e.cost;
-                prev[e.to] = v; // 頂点 v を通って e.to にたどり着いた
-                pq.emplace(dis[e.to], e.to);
+// verify: https://judge.yosupo.jp/submission/197142
+
+struct Dijkstra{
+    EdgeGraph g;
+    ll start;
+    vector<ll> dist, prev;
+
+    Dijkstra(const EdgeGraph& g_, ll start_) : g(g_), start(start_){ init(); }
+
+    void init(){
+        ll N = g.size();
+        dist.resize(N, LLONG_MAX);   
+        prev.resize(N, -1); // 初期化
+        vector<bool> visit(N, false);  // 確定
+        IQ<P> pq; 
+        dist[start] = 0;
+        pq.push(P(dist[start], start));
+        while(!pq.empty()){
+            P p = pq.top();
+            pq.pop();
+            ll v = p.second;
+            if(visit[v]) continue;   // これがないと確定済み地点を何回も見ることになる
+            visit[v] = true;
+            for(auto &e : g[v]){
+                ll next_cost = dist[v] + e.cost;
+                if(!visit[e.to] && dist[e.to] > next_cost){
+                    dist[e.to] = next_cost;
+                    prev[e.to] = v; // 頂点 v を通って e.to にたどり着いた
+                    pq.push(P(next_cost, e.to));
+                }
             }
         }
     }
-}
 
-// tへの最短path
-vector<ll> get_path(const vector<ll>& prev, ll t){
-    vector<ll> path;
-    for(ll cur = t; cur != -1; cur = prev[cur]){
-        path.push_back(cur);
+    // goalからstartへの経路を復元する
+    vector<ll> get_path(ll goal){
+        vector<ll> ret;
+        ll pos = goal;
+        while(pos >= 0){
+            ret.push_back(pos);
+            pos = prev[pos];
+        }
+        reverse(all(ret));
+        return ret;
     }
-    reverse(path.begin(), path.end()); // 逆順なのでひっくり返す
-    return path;
-}
+
+    // startからtへの距離を取得する
+    ll get_dist(ll t){ return dist[t]; }
+};
