@@ -1,3 +1,3 @@
-# Algorithm
+Algorithm
 =====
 atcoderなどで使うアルゴリズム
